@@ -1,0 +1,11 @@
+/target
+/bin
+/doc
+/.settings
+/.metadata
+/.project
+/.classpath
+*.db
+war
+src/main/webapp/WEB-INF/deploy/
+gwt-unitCache
