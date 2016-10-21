@@ -7,12 +7,12 @@ import cucumber.api.CucumberOptions;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         format = { "pretty", "html:target/cucumber" },
-        		features = {"classpath:br/com/silvaesouza/cucumbersample/test/CalcularAfetacao.feature"}
+        		features = {"classpath:cucumber/CalcularAfetacao.feature"}
         /*features = {"classpath:br/com/silvaesouza/cucumbersample/test/belly.feature" , 
         		    "classpath:br/com/silvaesouza/cucumbersample/test/calculator.feature"}*/
 )
 
-public class RunCukesTest {
+public class RunAfetacaoTest {
 	
 	//private GenericDAO<Livro> repository;
 }
