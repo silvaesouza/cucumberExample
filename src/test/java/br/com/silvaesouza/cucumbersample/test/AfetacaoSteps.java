@@ -1,8 +1,10 @@
 package br.com.silvaesouza.cucumbersample.test;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import cucumber.api.PendingException;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -10,6 +12,11 @@ import cucumber.api.java.en.When;
 public class AfetacaoSteps {
 	
 	Map<Integer, String> tas;
+	
+	@Before
+	public void setup() {
+		tas = new HashMap<Integer, String>();
+	}
 	
 	@Given("^Ta (\\d+) inserido com sucesso$")
 	public void ta_inserido_com_sucesso(int arg1) throws Throwable {
@@ -51,8 +58,20 @@ public class AfetacaoSteps {
 	}
 
 	@When("^Inserir afetacao de voz igual (\\d+) no TA (\\d+)$")
-	@Given("^Inserir afetacao de voz igual (\\d+) no TA (\\d+)$")
+	//@Given("^Inserir afetacao de voz igual (\\d+) no TA (\\d+)$")
 	public void inserir_afetacao_de_voz_igual_no_TA(int arg1, int arg2) throws Throwable {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new PendingException();
+	}
+	
+	@Given("^Mudar raiz do TA (\\d+) para null$")
+	public void mudar_raiz_do_TA_para_null(int arg1) throws Throwable {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new PendingException();
+	}
+
+	@Given("^Mudar raiz do TA (\\d+) para (\\d+)$")
+	public void mudar_raiz_do_TA_para(int arg1, int arg2) throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
 	    throw new PendingException();
 	}
