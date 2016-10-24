@@ -24,7 +24,7 @@ public class BellySteps {
     
     @Before
     public void setUp() throws Exception {
-    	System.out.println("chamou");
+    	System.out.println("chamou belly");
        /* new DBUnitHelper().cleanInsert("/tabelas/editora.xml");
         new DBUnitHelper().cleanInsert("/tabelas/livro.xml");
         repository = new GenericRepository<>(Livro.class);*/
