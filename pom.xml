@@ -4,8 +4,28 @@
 	<groupId>br.com.silvaesouza.cucumbersample</groupId>
 	<artifactId>cucumberSample</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
+	
+	<repositories>
+		<repository>
+			<id>nexus</id>
+			<url>http://airon.duckdns.org/nexus/content/groups/public</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	
 	<dependencies>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0.2.0g</version>
+		</dependency>
+	
 		<dependency>
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-java</artifactId>
@@ -35,7 +55,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.6</version>
+		</dependency>
 	</dependencies>
+	
 	<build>
 		<plugins>
 			<plugin>

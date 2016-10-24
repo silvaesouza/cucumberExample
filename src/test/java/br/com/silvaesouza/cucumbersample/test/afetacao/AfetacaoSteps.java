@@ -53,9 +53,9 @@ public class AfetacaoSteps {
 	}
 
 	@Then("^a afetacao VOZ atual do TA (\\d+) deve ser (\\d+)$")
-	public void a_afetacao_VOZ_atual_do_TA_deve_ser(Integer ta, Integer voz) throws Throwable {
+	public void a_afetacao_VOZ_atual_do_TA_deve_ser(Integer ta, Integer vozDeveSer) throws Throwable {
 		// TODO EXECUTAR SELECT NO BANCO
-		org.junit.Assert.assertEquals(voz, RunAfetacaoTest.tasVozAtual.get(ta));
+		org.junit.Assert.assertEquals(vozDeveSer, RunAfetacaoTest.tasVozAtual.get(ta));
 	}
 
 	@Then("^a maior afetacao VOZ do TA (\\d+) foi (\\d+)$")
@@ -65,17 +65,17 @@ public class AfetacaoSteps {
 	}
 
 	@Then("^a SOMA e MAX do TA (\\d+) devem ser (\\d+) e (\\d+)$")
-	public void a_SOMA_e_MAX_do_TA_devem_ser_e(int arg1, int arg2, int arg3) throws Throwable {
+	public void a_SOMA_e_MAX_do_TA_devem_ser_e(int ta1, int somaDeveSer, int MaxDeveSer) throws Throwable {
 	    // TODO EXECUTAR SELECT PARA VERIFICAR MAIOR SOMA E MAX DA ARVORE DO TA
 	}
 
 	@Given("^Mudar raiz do TA (\\d+) para null$")
-	public void mudar_raiz_do_TA_para_null(int arg1) throws Throwable {
-	    mudar_raiz_do_TA_para(arg1, null);
+	public void mudar_raiz_do_TA_para_null(int taX) throws Throwable {
+	    mudar_raiz_do_TA_para(taX, null);
 	}
 
 	@Given("^Mudar raiz do TA (\\d+) para (\\d+)$")
-	public void mudar_raiz_do_TA_para(Integer arg1, Integer arg2) throws Throwable {
+	public void mudar_raiz_do_TA_para(Integer taX, Integer taY) throws Throwable {
 		// TODO UPDATE RAIZ para outro TA ou para NULL
 	}
 	

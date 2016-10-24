@@ -1,5 +1,11 @@
 @afetacao
 Feature: Afetacao
+-Vincular/Desvincular TA uns aos outros
+-Efetuar calculos de Soma de afetacao levando em consideracao um TA raiz e seus derivados
+-Efetuar calculos de Máxima afetacao levando em consideracao um TA raiz e seus derivados
+-Os calculos de afetacao levam em consideracao apenas VOZ
+-SOMA = Soma da afetação atual do TA + Derivados 
+-MAX  = Soma da maior de todas as afetações do TA + derivados
 
   Scenario: Inserir registro inicial do TA 1 Raiz com afetacao 5
     Given Ta 1 inserido com sucesso
