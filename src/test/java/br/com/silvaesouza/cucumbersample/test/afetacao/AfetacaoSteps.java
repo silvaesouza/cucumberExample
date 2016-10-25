@@ -1,11 +1,28 @@
 package br.com.silvaesouza.cucumbersample.test.afetacao;
 
+import java.sql.Connection;
+
+import javax.sql.DataSource;
+
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+
 import br.com.silvaesouza.cucumbersample.test.RunAfetacaoTest;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+@ContextConfiguration(locations = { "/applicationContext_test.xml" })
 public class AfetacaoSteps {
+	
+	@Autowired
+	private DataSource dataSource;
+	
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 	
 	/*@Before("@afetacao")
 	public void setup() {
@@ -30,10 +47,18 @@ public class AfetacaoSteps {
 		System.out.println(tas.toString());
 	}*/
 	
+	public IDatabaseConnection getConnection() throws Exception{
+        Connection con = dataSource.getConnection();
+        IDatabaseConnection connection = new DatabaseConnection(con);
+        return connection;
+    }
+	
 	@Given("^Ta (\\d+) inserido com sucesso$")
 	public void ta_inserido_com_sucesso(int ta) throws Throwable {
 		// TODO EXECUTAR CHAMADA DO INSERT DE TA
 		RunAfetacaoTest.tasVozAtual.put(ta, 0);
+		
+		getConnection();
 	}
 
 	@When("^Inserir afetacao de voz igual a (\\d+) no TA (\\d+)$")
