@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 
 
 @Entity
-@Table(name="TBL_TA")
+@Table(name="TBL_TEST_TA")
 @SequenceGenerator(name = "sequence_ta", sequenceName = "SEQ_TA")
 public class TA implements Serializable {
 	
@@ -40,9 +40,22 @@ public class TA implements Serializable {
     private Integer tqaSomaIptv;*/
     
     private TA ta;
+    private TaAfetacaoParcial taAfetacaoParcial;
     
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="TQA_ULTIMA_AFETACAO")
+    @org.hibernate.annotations.ForeignKey( name = "none") 
+    public TaAfetacaoParcial getTaAfetacaoParcial() {
+        return this.taAfetacaoParcial;
+    }
+    
+	public void setTaAfetacaoParcial(TaAfetacaoParcial taAfetacaoParcial) {
+		this.taAfetacaoParcial = taAfetacaoParcial;
+	}
+
 	@ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="TQA_RAIZ")
+	@org.hibernate.annotations.ForeignKey( name = "none") 
     public TA getTa() {
         return this.ta;
     }

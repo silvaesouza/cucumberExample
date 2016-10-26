@@ -24,7 +24,7 @@
 	    <property name="user" value="${database.username}"/>
 	    <property name="password" value="${database.password}"/>
 	    <property name="minPoolSize" value="5"/>
-	    <property name="maxPoolSize" value="20"/>
+	    <property name="maxPoolSize" value="100"/>
 	    <property name="acquireIncrement" value="1"/>
 	    <property name="idleConnectionTestPeriod" value="100"/>
 	    <property name="maxStatements" value="0"/>
