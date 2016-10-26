@@ -1,11 +1,15 @@
 @afetacao
 Feature: Afetacao
--Vincular/Desvincular TA uns aos outros
--Efetuar calculos de Soma de afetacao levando em consideracao um TA raiz e seus derivados
--Efetuar calculos de Máxima afetacao levando em consideracao um TA raiz e seus derivados
--Os calculos de afetacao levam em consideracao apenas VOZ
--SOMA = Soma da afetação atual do TA + Derivados 
--MAX  = Soma da maior de todas as afetações do TA + derivados
+  -Vincular/Desvincular TA uns aos outros
+  -Efetuar calculos de Soma de afetacao levando em consideracao um TA raiz e seus derivados
+  -Efetuar calculos de Máxima afetacao levando em consideracao um TA raiz e seus derivados
+  -Os calculos de afetacao levam em consideracao apenas VOZ
+  -SOMA = Soma da afetação atual do TA + Derivados 
+  -MAX  = Soma da maior de todas as afetações do TA + derivados
+
+  Scenario: Validar base e limpar dados
+    Given Existe conexão com base de dados
+    Then Limpar registros
 
   Scenario: Inserir registro inicial do TA 1 Raiz com afetacao 5
     Given Ta 1 inserido com sucesso
@@ -16,7 +20,7 @@ Feature: Afetacao
     And a SOMA e MAX do TA 1 devem ser 5 e 5
 
   Scenario: Inserir novo TA Derivado 2 vinculado ao TA 1 com afetacao 10
-    Given Ta 2 inserido com sucesso
+    Given Ta 2 vinculado ao TA 1 inserido com sucesso
     When Inserir afetacao de voz igual a 10 no TA 2
     And Recalcular afetacao
     Then a afetacao VOZ atual do TA 2 deve ser 10
@@ -27,7 +31,7 @@ Feature: Afetacao
     And a SOMA e MAX do TA 1 devem ser 15 e 15
 
   Scenario: Inserir novo TA Derivado 3 vinculado ao TA 1 com afetacao 20
-    Given Ta 3 inserido com sucesso
+    Given Ta 3 vinculado ao TA 1 inserido com sucesso
     When Inserir afetacao de voz igual a 20 no TA 3
     And Recalcular afetacao
     Then a afetacao VOZ atual do TA 3 deve ser 20
@@ -41,7 +45,7 @@ Feature: Afetacao
     And a SOMA e MAX do TA 1 devem ser 35 e 35
 
   Scenario: Inserir novo TA Derivado 4 vinculado ao TA 2 com afetacao 10
-    Given Ta 4 inserido com sucesso
+    Given Ta 4 vinculado ao TA 2 inserido com sucesso
     When Inserir afetacao de voz igual a 10 no TA 4
     And Recalcular afetacao
     Then a afetacao VOZ atual do TA 4 deve ser 10

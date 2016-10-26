@@ -41,7 +41,7 @@
 		<property name="hibernateProperties">
 			<props>
 				<!-- Dialeto  -->
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">none</prop>
 				<prop key="hibernate.dialect">${database.target}</prop>
 				<prop key="hibernate.show_sql">${database.showSql}</prop>
 				<prop key="hibernate.generate_statistics">false</prop>

@@ -1,4 +1,4 @@
-package br.com.silvaesouza.cucumbersample.test;
+package br.com.silvaesouza.cucumbersample.test.afetacao;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
+import br.com.silvaesouza.cucumbersample.test.FeaturesBase;
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
@@ -19,6 +20,7 @@ public class RunAfetacaoTest extends FeaturesBase {
 
 	public static Map<Integer, Integer> tasVozAtual;
 	public static Map<Integer, Integer> tasVozMaxima;
+	public static Map<Integer, Integer> tasDePara;
 
 	// private static DataSource dataSource;
 
@@ -39,6 +41,7 @@ public class RunAfetacaoTest extends FeaturesBase {
 	public static void setup() {
 		tasVozAtual = new HashMap<Integer, Integer>();
 		tasVozMaxima = new HashMap<Integer, Integer>();
+		tasDePara = new HashMap<Integer, Integer>();
 		try {
 			JdbcDatabaseTester databaseTester = new JdbcDatabaseTester("oracle.jdbc.driver.OracleDriver",
 					"jdbc:oracle:thin:@localhost:1521/XE", "silvaesouza", "1234");
