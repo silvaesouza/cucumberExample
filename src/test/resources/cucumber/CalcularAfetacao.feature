@@ -1,281 +1,175 @@
+#language: pt
+
 @afetacao
-Feature: Afetacao
+Funcionalidade: Afetacao
   -Vincular/Desvincular TA uns aos outros
-  -Efetuar calculos de Soma de afetacao levando em consideracao um TA raiz e seus derivados
-  -Efetuar calculos de Máxima afetacao levando em consideracao um TA raiz e seus derivados
+  -Efetuar calculos de Soma de afetacao levEo em consideracao um TA raiz e seus derivados
+  -Efetuar calculos de Máxima afetacao levEo em consideracao um TA raiz e seus derivados
   -Os calculos de afetacao levam em consideracao apenas VOZ
   -SOMA = Soma da afetação atual do TA + Derivados 
   -MAX  = Soma da maior de todas as afetações do TA + derivados
 
-  Scenario: Validar base e limpar dados
-    Given Existe conexão com base de dados
-    Then Limpar registros
+  Cenário: Validar base e limpar dados
+    Dado Existe conexão com base de dados
+    Então Limpar registros
 
-  Scenario: Inserir registro inicial do TA 1 Raiz com afetacao 5
-    Given Ta 1 inserido com sucesso
-    When Inserir afetacao de voz igual a 5 no TA 1
-    And Recalcular afetacao
-    Then a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 1 deve ser 5
-    And a SOMA do MAX dos derivados do TA 1 deve ser 5
+  Esquema do Cenário: Inserir novo TA
+    Dado Ta <ta> vinculado ao TA <raiz> inserido com sucesso
+    Quando Inserir afetacao de voz igual a <afetacao> no TA <ta>
+    Então a afetacao VOZ atual do TA <ta> deve ser <vozAtual>
+    E a maior afetacao VOZ do TA <ta> foi <vozMaxAtual>
 
-  Scenario: Inserir novo TA Derivado 2 vinculado ao TA 1 com afetacao 10
-    Given Ta 2 vinculado ao TA 1 inserido com sucesso
-    When Inserir afetacao de voz igual a 10 no TA 2
-    And Recalcular afetacao
-    Then a afetacao VOZ atual do TA 2 deve ser 10
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 2 foi 10
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 2 deve ser 10
-    And a SOMA do MAX dos derivados do TA 2 deve ser 10
-    And a SOMA dos derivados do TA 1 deve ser 15
-    And a SOMA do MAX dos derivados do TA 1 deve ser 15
+    Exemplos: 
+      | ta | raiz | afetacao | vozAtual | vozMaxAtual |
+      |  1 | null |        5 |        5 |           5 |
+      |  2 |    1 |       10 |       10 |          10 |
+      |  3 |    1 |       20 |       20 |          20 |
+      |  4 |    2 |       10 |       10 |          10 |
 
-  Scenario: Inserir novo TA Derivado 3 vinculado ao TA 1 com afetacao 20
-    Given Ta 3 vinculado ao TA 1 inserido com sucesso
-    When Inserir afetacao de voz igual a 20 no TA 3
-    And Recalcular afetacao
-    Then a afetacao VOZ atual do TA 3 deve ser 20
-    And a afetacao VOZ atual do TA 2 deve ser 10
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 3 foi 20
-    And a maior afetacao VOZ do TA 2 foi 10
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 3 deve ser 20
-    And a SOMA do MAX dos derivados do TA 3 deve ser 20
-    And a SOMA dos derivados do TA 2 deve ser 10
-    And a SOMA do MAX dos derivados do TA 2 deve ser 10
-    And a SOMA dos derivados do TA 1 deve ser 35
-    And a SOMA do MAX dos derivados do TA 1 deve ser 35
+  Esquema do Cenário: Calcular Arvore
+    Dado Recalcular afetacao
+    Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
+    Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
 
-  Scenario: Inserir novo TA Derivado 4 vinculado ao TA 2 com afetacao 10
-    Given Ta 4 vinculado ao TA 2 inserido com sucesso
-    When Inserir afetacao de voz igual a 10 no TA 4
-    And Recalcular afetacao
-    Then a afetacao VOZ atual do TA 4 deve ser 10
-    And a afetacao VOZ atual do TA 3 deve ser 20
-    And a afetacao VOZ atual do TA 2 deve ser 10
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 4 foi 10
-    And a maior afetacao VOZ do TA 3 foi 20
-    And a maior afetacao VOZ do TA 2 foi 10
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 4 deve ser 10
-    And a SOMA do MAX dos derivados do TA 4 deve ser 10
-    And a SOMA dos derivados do TA 3 deve ser 20
-    And a SOMA do MAX dos derivados do TA 3 deve ser 20
-    And a SOMA dos derivados do TA 1 deve ser 20
-    And a SOMA do MAX dos derivados do TA 1 deve ser 20
-    And a SOMA dos derivados do TA 1 deve ser 45
-    And a SOMA do MAX dos derivados do TA 1 deve ser 45
+    Exemplos: 
+      | ta | somaDerivados | somaMaxDerivados |
+      |  4 |            10 |               10 |
+      |  3 |            20 |               20 |
+      |  2 |            20 |               20 |
+      |  1 |            45 |               45 |
 
-  Scenario: Inserir nova afetacao no TA Derivado 3 com afetacao 30
-    Given Inserir afetacao de voz igual a 30 no TA 3
-    When Recalcular afetacao
-    Then a afetacao VOZ atual do TA 4 deve ser 10
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 10
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 4 foi 10
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 10
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 4 deve ser 10
-    And a SOMA do MAX dos derivados do TA 4 deve ser 10
-    And a SOMA dos derivados do TA 3 deve ser 30
-    And a SOMA do MAX dos derivados do TA 3 deve ser 30
-    And a SOMA dos derivados do TA 2 deve ser 20
-    And a SOMA do MAX dos derivados do TA 2 deve ser 20
-    And a SOMA dos derivados do TA 1 deve ser 55
-    And a SOMA do MAX dos derivados do TA 1 deve ser 55
+  Esquema do Cenário: Inserir nova afetacao
+    Dado Inserir afetacao de voz igual a <afetacao> no TA <ta>
+    Então a afetacao VOZ atual do TA <ta> deve ser <vozAtual>
+    E a maior afetacao VOZ do TA <ta> foi <vozMaxAtual>
 
-  Scenario: Inserir nova afetacao no TA Derivado 4 com afetacao 40
-    Given Inserir afetacao de voz igual a 40 no TA 4
-    When Recalcular afetacao
-    Then a afetacao VOZ atual do TA 4 deve ser 40
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 10
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 4 foi 40
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 10
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 4 deve ser 40
-    And a SOMA do MAX dos derivados do TA 4 deve ser 40
-    And a SOMA dos derivados do TA 3 deve ser 30
-    And a SOMA do MAX dos derivados do TA 3 deve ser 30
-    And a SOMA dos derivados do TA 2 deve ser 50
-    And a SOMA do MAX dos derivados do TA 2 deve ser 50
-    And a SOMA dos derivados do TA 1 deve ser 85
-    And a SOMA do MAX dos derivados do TA 1 deve ser 85
+    Exemplos: 
+      | ta | afetacao | vozAtual | vozMaxAtual |
+      |  3 |       30 |       30 |          30 |
+      |  4 |       40 |       40 |          40 |
+      |  4 |       20 |       20 |          40 |
+      |  4 |       20 |       20 |          40 |
+      |  2 |       20 |       20 |          20 |
 
-  Scenario: Inserir nova afetacao no TA Derivado 4 com afetacao 20
-    Given Inserir afetacao de voz igual a 20 no TA 4
-    When Recalcular afetacao
-    Then a afetacao VOZ atual do TA 4 deve ser 20
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 10
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 4 foi 40
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 10
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 4 deve ser 20
-    And a SOMA do MAX dos derivados do TA 4 deve ser 40
-    And a SOMA dos derivados do TA 3 deve ser 30
-    And a SOMA do MAX dos derivados do TA 3 deve ser 30
-    And a SOMA dos derivados do TA 2 deve ser 30
-    And a SOMA do MAX dos derivados do TA 2 deve ser 50
-    And a SOMA dos derivados do TA 1 deve ser 65
-    And a SOMA do MAX dos derivados do TA 1 deve ser 85
+  Esquema do Cenário: Calcular Arvore Novamente
+    Dado Recalcular afetacao
+    Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
+    Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
 
-  Scenario: Inserir nova afetacao no TA Derivado 2 com afetacao 20
-    Given Inserir afetacao de voz igual a 20 no TA 2
-    When Recalcular afetacao
-    Then a afetacao VOZ atual do TA 4 deve ser 20
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 20
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 4 foi 40
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 20
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 4 deve ser 20
-    And a SOMA do MAX dos derivados do TA 4 deve ser 40
-    And a SOMA dos derivados do TA 3 deve ser 30
-    And a SOMA do MAX dos derivados do TA 3 deve ser 30
-    And a SOMA dos derivados do TA 2 deve ser 40
-    And a SOMA do MAX dos derivados do TA 2 deve ser 60
-    And a SOMA dos derivados do TA 1 deve ser 75
-    And a SOMA do MAX dos derivados do TA 1 deve ser 95
+    Exemplos: 
+      | ta | raiz | vozAtual | vozMaxAtual | somaDerivados | somaMaxDerivados |
+      |  4 |    2 |       20 |          40 |            20 |               40 |
+      |  3 |    1 |       30 |          30 |            30 |               30 |
+      |  2 |    1 |       20 |          20 |            40 |               60 |
+      |  1 | null |        5 |           5 |            75 |               95 |
 
-  Scenario: Atualizar afetacao mais antiga do TA Derivado 2 com afetacao 50
-    Given Atualizar afetacao mais antiga do TA 2 para 50
-    When Recalcular afetacao
-    Then a afetacao VOZ atual do TA 4 deve ser 20
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 20
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 4 foi 40
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 50
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 4 deve ser 20
-    And a SOMA do MAX dos derivados do TA 4 deve ser 40
-    And a SOMA dos derivados do TA 3 deve ser 30
-    And a SOMA do MAX dos derivados do TA 3 deve ser 30
-    And a SOMA dos derivados do TA 2 deve ser 40
-    And a SOMA do MAX dos derivados do TA 2 deve ser 90
-    And a SOMA dos derivados do TA 1 deve ser 75
-    And a SOMA do MAX dos derivados do TA 1 deve ser 125
+  Esquema do Cenário: Atualizar afetacao mais antiga
+    Dado Atualizar afetacao mais antiga do TA <ta> para <afetacao>
+    Então a afetacao VOZ atual do TA <ta> deve ser <vozAtual>
+    E a maior afetacao VOZ do TA <ta> foi <vozMaxAtual>
 
-  Scenario: Alterar TA Derivado 2 para raiz propria
-    Given Mudar raiz do TA 2 para null
-    When Recalcular afetacao
-    Then a afetacao VOZ atual do TA 4 deve ser 20
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 20
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 4 foi 40
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 50
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 4 deve ser 20
-    And a SOMA do MAX dos derivados do TA 4 deve ser 40
-    And a SOMA dos derivados do TA 3 deve ser 30
-    And a SOMA do MAX dos derivados do TA 3 deve ser 30
-    And a SOMA dos derivados do TA 2 deve ser 40
-    And a SOMA do MAX dos derivados do TA 2 deve ser 90
-    And a SOMA dos derivados do TA 1 deve ser 35
-    And a SOMA do MAX dos derivados do TA 1 deve ser 35
+    Exemplos: 
+      | ta | afetacao | vozAtual | vozMaxAtual |
+      |  2 |       50 |       20 |          50 |
 
-  Scenario: Alterar TA Raiz 2 tornando derivado do TA Raiz 1
-    Given Mudar raiz do TA 2 para 1
-    When Recalcular afetacao
-    Then a afetacao VOZ atual do TA 4 deve ser 20
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 20
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 4 foi 40
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 50
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 4 deve ser 20
-    And a SOMA do MAX dos derivados do TA 4 deve ser 40
-    And a SOMA dos derivados do TA 3 deve ser 30
-    And a SOMA do MAX dos derivados do TA 3 deve ser 30
-    And a SOMA dos derivados do TA 2 deve ser 40
-    And a SOMA do MAX dos derivados do TA 2 deve ser 90
-    And a SOMA dos derivados do TA 1 deve ser 75
-    And a SOMA do MAX dos derivados do TA 1 deve ser 125
+  Esquema do Cenário: Calcular Arvore apos alterar afetacao mais antiga
+    Dado Recalcular afetacao
+    Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
+    Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
 
-  Scenario: Alterar TA Raiz 3 tornando derivado do TA Raiz 4
-    Given Mudar raiz do TA 3 para 4
-    When Recalcular afetacao
-    Then a afetacao VOZ atual do TA 4 deve ser 20
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 20
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 4 foi 40
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 50
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 4 deve ser 50
-    And a SOMA do MAX dos derivados do TA 4 deve ser 70
-    And a SOMA dos derivados do TA 3 deve ser 30
-    And a SOMA do MAX dos derivados do TA 3 deve ser 30
-    And a SOMA dos derivados do TA 2 deve ser 70
-    And a SOMA do MAX dos derivados do TA 2 deve ser 120
-    And a SOMA dos derivados do TA 1 deve ser 75
-    And a SOMA do MAX dos derivados do TA 1 deve ser 125
+    Exemplos: 
+      | ta | raiz | vozAtual | vozMaxAtual | somaDerivados | somaMaxDerivados |
+      |  4 |    2 |       20 |          40 |            20 |               40 |
+      |  3 |    1 |       30 |          30 |            30 |               30 |
+      |  2 |    1 |       20 |          50 |            40 |               90 |
+      |  1 | null |        5 |           5 |            75 |              125 |
 
-  Scenario: Inserir novo TA Derivado 5 vinculado ao TA 3 com afetacao 20
-    Given Ta 5 vinculado ao TA 3 inserido com sucesso
-    When Inserir afetacao de voz igual a 20 no TA 5
-    And Recalcular afetacao
-    Then a afetacao VOZ atual do TA 5 deve ser 20
-    Then a afetacao VOZ atual do TA 4 deve ser 20
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 20
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 5 foi 20
-    And a maior afetacao VOZ do TA 4 foi 40
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 50
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 5 deve ser 20
-    And a SOMA do MAX dos derivados do TA 5 deve ser 20
-    And a SOMA dos derivados do TA 4 deve ser 70
-    And a SOMA do MAX dos derivados do TA 4 deve ser 90
-    And a SOMA dos derivados do TA 3 deve ser 50
-    And a SOMA do MAX dos derivados do TA 3 deve ser 50
-    And a SOMA dos derivados do TA 2 deve ser 90
-    And a SOMA do MAX dos derivados do TA 2 deve ser 140
-    And a SOMA dos derivados do TA 1 deve ser 95
-    And a SOMA do MAX dos derivados do TA 1 deve ser 145
+  Esquema do Cenário: Alterar TA Raiz
+    Dado Mudar raiz do TA <ta> para <raiz>
+    Então a afetacao VOZ atual do TA <ta> deve ser <vozAtual>
+    E a maior afetacao VOZ do TA <ta> foi <vozMaxAtual>
 
-  Scenario: Alterar TA Raiz 5 tornando derivado do TA Raiz 2
-    Given Mudar raiz do TA 5 para 2
-    When Recalcular afetacao
-    Then a afetacao VOZ atual do TA 5 deve ser 20
-    Then a afetacao VOZ atual do TA 4 deve ser 20
-    And a afetacao VOZ atual do TA 3 deve ser 30
-    And a afetacao VOZ atual do TA 2 deve ser 20
-    And a afetacao VOZ atual do TA 1 deve ser 5
-    And a maior afetacao VOZ do TA 5 foi 20
-    And a maior afetacao VOZ do TA 4 foi 40
-    And a maior afetacao VOZ do TA 3 foi 30
-    And a maior afetacao VOZ do TA 2 foi 50
-    And a maior afetacao VOZ do TA 1 foi 5
-    And a SOMA dos derivados do TA 5 deve ser 20
-    And a SOMA do MAX dos derivados do TA 5 deve ser 20
-    And a SOMA dos derivados do TA 4 deve ser 50
-    And a SOMA do MAX dos derivados do TA 4 deve ser 70
-    And a SOMA dos derivados do TA 3 deve ser 30
-    And a SOMA do MAX dos derivados do TA 3 deve ser 30
-    And a SOMA dos derivados do TA 2 deve ser 90
-    And a SOMA do MAX dos derivados do TA 2 deve ser 140
-    And a SOMA dos derivados do TA 1 deve ser 95
-    And a SOMA do MAX dos derivados do TA 1 deve ser 145
+    Exemplos: 
+      | ta | raiz | vozAtual | vozMaxAtual |
+      |  2 | null |       20 |          50 |
+
+  Esquema do Cenário: Calcular Arvore apos alterar remover elemento da arvore
+    Dado Recalcular afetacao
+    Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
+    Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
+
+    Exemplos: 
+      | ta | raiz | vozAtual | vozMaxAtual | somaDerivados | somaMaxDerivados |
+      |  4 |    2 |       20 |          40 |            20 |               40 |
+      |  3 |    1 |       30 |          30 |            30 |               30 |
+      |  2 | null |       20 |          50 |            40 |               90 |
+      |  1 | null |        5 |           5 |            35 |               65 |
+
+  Esquema do Cenário: Alterar TA Raiz
+    Dado Mudar raiz do TA <ta> para <raiz>
+    Então a afetacao VOZ atual do TA <ta> deve ser <vozAtual>
+    E a maior afetacao VOZ do TA <ta> foi <vozMaxAtual>
+
+    Exemplos: 
+      | ta | raiz | vozAtual | vozMaxAtual |
+      |  2 |    1 |       20 |          50 |
+      |  3 |    4 |       30 |          30 |
+
+  Esquema do Cenário: Calcular Arvore apos voltar elemento e alterar outro
+    Dado Recalcular afetacao
+    Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
+    Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
+
+    Exemplos: 
+      | ta | raiz | vozAtual | vozMaxAtual | somaDerivados | somaMaxDerivados |
+      |  4 |    2 |       20 |          40 |            50 |               70 |
+      |  3 |    4 |       30 |          30 |            30 |               30 |
+      |  2 |    1 |       20 |          50 |            70 |              120 |
+      |  1 | null |        5 |           5 |            75 |              125 |
+
+  Esquema do Cenário: Inserir novo TA
+    Dado Ta <ta> vinculado ao TA <raiz> inserido com sucesso
+    Quando Inserir afetacao de voz igual a <afetacao> no TA <ta>
+    Então a afetacao VOZ atual do TA <ta> deve ser <vozAtual>
+    E a maior afetacao VOZ do TA <ta> foi <vozMaxAtual>
+
+    Exemplos: 
+      | ta | raiz | afetacao | vozAtual | vozMaxAtual |
+      |  5 |    3 |       20 |       20 |          20 |
+
+  Esquema do Cenário: Calcular Arvore apos inserir novo TA
+    Dado Recalcular afetacao
+    Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
+    Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
+
+    Exemplos: 
+      | ta | raiz | vozAtual | vozMaxAtual | somaDerivados | somaMaxDerivados |
+      |  5 |    3 |       20 |          20 |            20 |               20 |
+      |  4 |    2 |       20 |          40 |            70 |               90 |
+      |  3 |    4 |       30 |          30 |            50 |               50 |
+      |  2 |    1 |       20 |          50 |            90 |              140 |
+      |  1 | null |        5 |           5 |            95 |              145 |
+
+  Esquema do Cenário: Alterar TA Raiz
+    Dado Mudar raiz do TA <ta> para <raiz>
+    Então a afetacao VOZ atual do TA <ta> deve ser <vozAtual>
+    E a maior afetacao VOZ do TA <ta> foi <vozMaxAtual>
+
+    Exemplos: 
+      | ta | raiz | vozAtual | vozMaxAtual |
+      |  5 |    2 |       20 |          20 |
+
+  Cenário: Calcular Arvore apos alterar elemento de lugar
+    Dado Recalcular afetacao
+
+  Esquema do Cenário: Validar Arvore apos alterar elemento de lugar
+    Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
+    Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
+
+    Exemplos: 
+      | ta | raiz | vozAtual | vozMaxAtual | somaDerivados | somaMaxDerivados |
+      |  5 |    2 |       20 |          20 |            20 |               20 |
+      |  4 |    2 |       20 |          40 |            50 |               70 |
+      |  3 |    4 |       30 |          30 |            30 |               30 |
+      |  2 |    1 |       20 |          50 |            90 |              140 |
+      |  1 | null |        5 |           5 |            95 |              145 |
