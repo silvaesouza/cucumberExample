@@ -28,12 +28,45 @@ public class TaAfetacaoParcial implements Serializable {
 	@Column(name = "AAP_CODIGO", nullable = false, precision = 10, scale = 0)
 	private Integer codigo;
 
-	@Column(name = "AAP_VOZ", nullable = false, precision = 10, scale = 0)
+	@Column(name = "AAP_VOZ", precision = 10, scale = 0)
 	private Integer voz;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "AAP_DATA", nullable = false, length = 7)
+	@Column(name = "AAP_DATA", length = 7)
 	private Date data;
+	
+	@Column(name="AAP_TRANSMISSAO", precision=10, scale=0)
+    private Integer transmissao;
+	
+	@Column(name="AAP_DETERMINISTICA", precision=10, scale=0)
+    private Integer deterministica;
+	
+	@Column(name="AAP_SPEEDY", precision=10, scale=0)
+    private Integer speedy;
+	
+	@Column(name="AAP_CLIENTE", precision=10, scale=0)
+    private Integer cliente;
+	
+	@Column(name="AAP_CP", precision=10, scale=0)
+    private Integer cp;
+	
+	@Column(name="AAP_REDEIP", precision=10, scale=0)
+    private Integer redeip;
+	
+	@Column(name="AAP_INTERCONEXAO", precision=10, scale=0)
+    private Integer interconexao;
+	
+	@Column(name="AAP_SPPAC", precision=10, scale=0)
+    private Integer sppac;
+	
+	@Column(name="AAP_DTH", precision=10, scale=0)
+    private Integer dth;
+	
+	@Column(name="AAP_FTTX", precision=10, scale=0)
+    private Integer fttx;
+	
+	@Column(name="AAP_IPTV", precision=10, scale=0)
+    private Integer iptv;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "AAP_TA", nullable = false)
@@ -70,6 +103,94 @@ public class TaAfetacaoParcial implements Serializable {
 
 	public void setTa(TA ta) {
 		this.ta = ta;
+	}
+
+	public Integer getTransmissao() {
+		return transmissao;
+	}
+
+	public void setTransmissao(Integer transmissao) {
+		this.transmissao = transmissao;
+	}
+
+	public Integer getDeterministica() {
+		return deterministica;
+	}
+
+	public void setDeterministica(Integer deterministica) {
+		this.deterministica = deterministica;
+	}
+
+	public Integer getSpeedy() {
+		return speedy;
+	}
+
+	public void setSpeedy(Integer speedy) {
+		this.speedy = speedy;
+	}
+
+	public Integer getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Integer cliente) {
+		this.cliente = cliente;
+	}
+
+	public Integer getCp() {
+		return cp;
+	}
+
+	public void setCp(Integer cp) {
+		this.cp = cp;
+	}
+
+	public Integer getRedeip() {
+		return redeip;
+	}
+
+	public void setRedeip(Integer redeip) {
+		this.redeip = redeip;
+	}
+
+	public Integer getInterconexao() {
+		return interconexao;
+	}
+
+	public void setInterconexao(Integer interconexao) {
+		this.interconexao = interconexao;
+	}
+
+	public Integer getSppac() {
+		return sppac;
+	}
+
+	public void setSppac(Integer sppac) {
+		this.sppac = sppac;
+	}
+
+	public Integer getDth() {
+		return dth;
+	}
+
+	public void setDth(Integer dth) {
+		this.dth = dth;
+	}
+
+	public Integer getFttx() {
+		return fttx;
+	}
+
+	public void setFttx(Integer fttx) {
+		this.fttx = fttx;
+	}
+
+	public Integer getIptv() {
+		return iptv;
+	}
+
+	public void setIptv(Integer iptv) {
+		this.iptv = iptv;
 	}
 
 }

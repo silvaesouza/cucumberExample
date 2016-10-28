@@ -35,14 +35,12 @@ public class AfetacaoSteps {
 
 	private final String TABELA_TA = "TBL_TEST_TA";
 	private final String TABELA_TA_AFETACAO = "TBL_TEST_TA_AFETACAO_PARCIAL";
+	private final String TABELA_AFETACAO_MAXIMA = "AFETACAO_TEST_MAXIMA_TA";
 	// private final String SEQUENCE_TA = "SEQ_TA";
 	private final String SEQUENCE_TA_AFETACAO = "SEQ_TA_AFETACAO_PARCIAL";
 
 	@Autowired
 	private DataSource dataSource;
-	
-//	@Autowired
-//	private SessionFactoryImpl sessionFactory;
 	
 	@Autowired
 	AnnotationSessionFactoryBean sessionFactory;
@@ -150,6 +148,31 @@ public class AfetacaoSteps {
 		table.addRow(values);
 		return new DefaultDataSet(table);
 	}
+	
+	/*private DefaultDataSet getDataSetMaximaAfetacao(Integer codigo, Integer taRaiz, Integer voz)
+			throws DataSetException {
+		List<Column> columnsList = new ArrayList<Column>();
+		List<Object> columnsValue = new ArrayList<Object>();
+		columnsList.add(new Column("SEQUENCIA", DataType.INTEGER));
+		columnsValue.add(codigo);
+		if (voz != null) {
+			columnsList.add(new Column("VOZ", DataType.INTEGER));
+			columnsValue.add(voz);
+		}
+		columnsList.add(new Column("TQA_RAIZ", DataType.INTEGER));
+		columnsValue.add(taRaiz);
+
+		Column[] columns = new Column[columnsList.size()];
+		columns = columnsList.toArray(columns);
+
+		DefaultTable table = new DefaultTable(TABELA_AFETACAO_MAXIMA, columns);
+
+		Object[] values = new Object[columnsValue.size()];
+		values = columnsValue.toArray(values);
+
+		table.addRow(values);
+		return new DefaultDataSet(table);
+	}*/
 
 	@Given("^Existe conexão com base de dados$")
 	public void existe_conexão_com_base_de_dados() throws Throwable {
@@ -163,11 +186,14 @@ public class AfetacaoSteps {
 	public void limpar_registros() throws Throwable {
 		final DefaultTable tableTa = new DefaultTable(TABELA_TA);
 		final DefaultTable tableTaAfetacao = new DefaultTable(TABELA_TA_AFETACAO);
+		final DefaultTable tableAfetacaoMaxima = new DefaultTable(TABELA_AFETACAO_MAXIMA);
 
 		IDatabaseConnection conn = getConnection();
 		DefaultDataSet dataSet = new DefaultDataSet(tableTaAfetacao);
 		DatabaseOperation.DELETE_ALL.execute(conn, dataSet);
 		dataSet = new DefaultDataSet(tableTa);
+		DatabaseOperation.DELETE_ALL.execute(conn, dataSet);
+		dataSet = new DefaultDataSet(tableAfetacaoMaxima);
 		DatabaseOperation.DELETE_ALL.execute(conn, dataSet);
 	}
 
@@ -181,15 +207,15 @@ public class AfetacaoSteps {
 		RunAfetacaoTest.tasVozAtual.put(ta, 0);
 		TA taEntity = new TA();
 		
-		System.out.println("RAIZ >> " + taRaiz);
 		DefaultDataSet dataSet = getDataSetTa(ta, new Date(), 0, taRaiz, null);
 
 		IDatabaseConnection conn = getConnection();
 		DatabaseOperation.INSERT.execute(conn, dataSet);
+		
+		/*dataSet = getDataSetMaximaAfetacao(ta, taRaiz, 0);
+		DatabaseOperation.INSERT.execute(conn, dataSet);*/
 
 		RunAfetacaoTest.tasDePara.put(taEntity.getTqaCodigo(), ta);
-
-		// conn.getConnection().commit();
 	}
 
 	@When("^Inserir afetacao de voz igual a (\\d+) no TA (\\d+)$")
@@ -207,8 +233,6 @@ public class AfetacaoSteps {
 
 		DefaultDataSet dataSetTa = getDataSetTa(ta, null, novaVoz, null, codigo);
 		DatabaseOperation.UPDATE.execute(conn, dataSetTa);
-
-		// conn.getConnection().commit();
 	}
 
 	@When("^Recalcular afetacao$")
@@ -252,12 +276,18 @@ public class AfetacaoSteps {
 		st = null;
 		Integer somaVozEh = rs.getInt(1);
 
-		//org.junit.Assert.assertEquals(somaVozDeveSer, somaVozEh);
+		org.junit.Assert.assertEquals(somaVozDeveSer, somaVozEh);
 	}
 
 	@Then("^a SOMA do MAX dos derivados do TA (\\d+) deve ser (\\d+)$")
-	public void a_SOMA_do_MAX_dos_derivados_do_TA_deve_ser(int arg1, int arg2) throws Throwable {
-		// TODO EXECUTAR SELECT PARA VERIFICAR SOMA DO MAX DA ARVORE DO TA
+	public void a_SOMA_do_MAX_dos_derivados_do_TA_deve_ser(Integer ta, Integer somaMaxVozDeveSer) throws Throwable {
+		Statement st = this.getConnection().getConnection().createStatement();
+		ResultSet rs = st.executeQuery("SELECT voz FROM " + TABELA_AFETACAO_MAXIMA + " WHERE sequencia = " + ta);
+		rs.next();
+		st = null;
+		Integer somaMaxVozEh = rs.getInt(1);
+
+		org.junit.Assert.assertEquals(somaMaxVozDeveSer, somaMaxVozEh);
 
 		/*
 		 * SELECT * FROM AFETACAO_MAXIMA_TA WHERE SEQUENCIA = 3010075;
@@ -272,8 +302,10 @@ public class AfetacaoSteps {
 	@Given("^Mudar raiz do TA (\\d+) para (\\d+)$")
 	public void mudar_raiz_do_TA_para(Integer taX, Integer taY) throws Throwable {
 		DefaultDataSet dataSet = getDataSetTa(taX, null, null, taY, null);
-
 		DatabaseOperation.UPDATE.execute(getConnection(), dataSet);
+		
+		/*dataSet = getDataSetMaximaAfetacao(taX, taY, null);
+		DatabaseOperation.UPDATE.execute(getConnection(), dataSet);*/
 	}
 
 	@Given("^Atualizar afetacao mais antiga do TA (\\d+) para (\\d+)$")
