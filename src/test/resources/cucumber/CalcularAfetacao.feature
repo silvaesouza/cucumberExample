@@ -1,5 +1,4 @@
 #language: pt
-
 @afetacao
 Funcionalidade: Afetacao
   -Vincular/Desvincular TA uns aos outros
@@ -26,7 +25,7 @@ Funcionalidade: Afetacao
       |  3 |    1 |       20 |       20 |          20 |
       |  4 |    2 |       10 |       10 |          10 |
 
-	Cenário: Calcular Arvore
+  Cenário: Calcular Arvore
     Dado Recalcular afetacao
 
   Esquema do Cenário: Validar Arvore
@@ -52,7 +51,7 @@ Funcionalidade: Afetacao
       |  4 |       20 |       20 |          40 |
       |  4 |       20 |       20 |          40 |
       |  2 |       20 |       20 |          20 |
-      
+
   Cenário: Calcular Arvore Novamente
     Dado Recalcular afetacao
 
@@ -75,7 +74,7 @@ Funcionalidade: Afetacao
     Exemplos: 
       | ta | afetacao | vozAtual | vozMaxAtual |
       |  2 |       50 |       20 |          50 |
-      
+
   Cenário: Calcular Arvore apos alterar afetacao mais antiga
     Dado Recalcular afetacao
 
@@ -101,7 +100,7 @@ Funcionalidade: Afetacao
 
   Cenário: Calcular Arvore apos alterar remover elemento da arvore
     Dado Recalcular afetacao
-  
+
   Esquema do Cenário: Validar Arvore apos alterar remover elemento da arvore
     Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
     Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
@@ -111,7 +110,7 @@ Funcionalidade: Afetacao
       |  4 |    2 |       20 |          40 |            20 |               40 |
       |  3 |    1 |       30 |          30 |            30 |               30 |
       |  2 | null |       20 |          50 |            40 |               90 |
-      |  1 | null |        5 |           5 |            35 |               65 |
+      |  1 | null |        5 |           5 |            35 |               35 |
 
   Esquema do Cenário: Alterar TA Raiz
     Dado Mudar raiz do TA <ta> para <raiz>
@@ -125,7 +124,7 @@ Funcionalidade: Afetacao
 
   Cenário: Calcular Arvore apos voltar elemento e alterar outro
     Dado Recalcular afetacao
-  
+
   Esquema do Cenário: Validar Arvore apos voltar elemento e alterar outro
     Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
     Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
@@ -149,7 +148,7 @@ Funcionalidade: Afetacao
 
   Cenário: Calcular Arvore apos inserir novo TA
     Dado Recalcular afetacao
-  
+
   Esquema do Cenário: Validar Arvore apos inserir novo TA
     Então a SOMA dos derivados do TA <ta> deve ser <somaDerivados>
     Então a SOMA do MAX dos derivados do TA <ta> deve ser <somaMaxDerivados>
