@@ -49,7 +49,6 @@ Funcionalidade: Afetacao
       |  3 |       30 |       30 |          30 |
       |  4 |       40 |       40 |          40 |
       |  4 |       20 |       20 |          40 |
-      |  4 |       20 |       20 |          40 |
       |  2 |       20 |       20 |          20 |
 
   Cenário: Calcular Arvore Novamente

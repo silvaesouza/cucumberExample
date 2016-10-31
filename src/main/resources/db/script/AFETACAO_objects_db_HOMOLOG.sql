@@ -111,29 +111,6 @@ BEGIN
     );
 END;
 --------------------------------------------------------------------------------
-CREATE TRIGGER TTS_TA_NOVO_AFET_MAX
-FOR INSERT ON TBL_TEST_TA
-COMPOUND TRIGGER
-  type tas_para_recalcular_type is table of TBL_TEST_TA.TQA_CODIGO%TYPE;
-  tas_para_recalcular tas_para_recalcular_type;
-before statement IS
-begin
-    tas_para_recalcular := tas_para_recalcular_type();
-end before statement;
-AFTER EACH ROW IS
-BEGIN
-  tas_para_recalcular.extend(1);
-  tas_para_recalcular(tas_para_recalcular.count()) := :NEW.TQA_CODIGO;
-END AFTER EACH ROW;
-AFTER STATEMENT IS
-BEGIN
-    for v_it in tas_para_recalcular.first .. tas_para_recalcular.last
-    loop
-            ATUALIZAR_AFET_MAX_TA(tas_para_recalcular(v_it));
-            ATUALIZAR_SOMA_AFETACOES(tas_para_recalcular(v_it));
-    end loop;
-END AFTER STATEMENT;
-END TTS_TA_NOVO_AFET_MAX;
 --------------------------------------------------------------------------------
 CREATE TRIGGER TTS_ULTIMA_AFETACAO_TA
 AFTER INSERT
@@ -177,31 +154,6 @@ BEGIN
     end if;
 END AFTER STATEMENT;
 END TTS_TA_AFET_MAX;
---------------------------------------------------------------------------------
-CREATE TABLE "AFETACAO_TEST_MAXIMA_TA"
-  (
-    "SEQUENCIA"       NUMBER(10,0) NOT NULL ENABLE,
-    "TQA_RAIZ"        NUMBER(10,0),
-    "TRANSMISSAO"     NUMBER,
-    "VOZ"             NUMBER,
-    "DETERMINISTICA"  NUMBER,
-    "SPEEDY"          NUMBER,
-    "CLIENTE"         NUMBER,
-    "CP"              NUMBER,
-    "REDE_IP"         NUMBER,
-    "INTERCONEXAO"    NUMBER,
-    "SPPAC"           NUMBER,
-    "DTH"             NUMBER,
-    "FTTX"            NUMBER,
-    "IPTV"            NUMBER,
-    "DT_ULT_AFETACAO" TIMESTAMP (6),
-    PRIMARY KEY ("SEQUENCIA")
-  );
---------------------------------------------------------------------------------
---DROP INDEX "AFETACAO_MAXIMA_TA_PK_IDX";
---DROP INDEX "AFETACAO_MAXIMA_TA_RAIZ_IDX";
-CREATE UNIQUE INDEX "AFETACAO_MAXIMA_TA_PK_IDX" ON "AFETACAO_TEST_MAXIMA_TA" ("SEQUENCIA");
-CREATE INDEX "AFETACAO_MAXIMA_TA_RAIZ_IDX" ON "AFETACAO_TEST_MAXIMA_TA" ("TQA_RAIZ");
 --------------------------------------------------------------------------------
 CREATE OR REPLACE type soma_afetacao_type
 AS

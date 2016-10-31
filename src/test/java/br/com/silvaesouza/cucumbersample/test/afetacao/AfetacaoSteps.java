@@ -36,6 +36,7 @@ public class AfetacaoSteps {
 	private final String TABELA_TA = "TBL_TEST_TA";
 	private final String TABELA_TA_AFETACAO = "TBL_TEST_TA_AFETACAO_PARCIAL";
 	private final String TABELA_AFETACAO_MAXIMA = "AFETACAO_TEST_MAXIMA_TA";
+	private final String TABELA_RECALCULA_AFETACAO = "TBL_TA_TEST_RECALCULA_AFETACAO";
 	// private final String SEQUENCE_TA = "SEQ_TA";
 	private final String SEQUENCE_TA_AFETACAO = "SEQ_TA_AFETACAO_PARCIAL";
 
@@ -187,6 +188,8 @@ public class AfetacaoSteps {
 		final DefaultTable tableTa = new DefaultTable(TABELA_TA);
 		final DefaultTable tableTaAfetacao = new DefaultTable(TABELA_TA_AFETACAO);
 		final DefaultTable tableAfetacaoMaxima = new DefaultTable(TABELA_AFETACAO_MAXIMA);
+		final DefaultTable tableRecalculaAfetacao = new DefaultTable(TABELA_RECALCULA_AFETACAO);
+		
 
 		IDatabaseConnection conn = getConnection();
 		DefaultDataSet dataSet = new DefaultDataSet(tableTaAfetacao);
@@ -194,6 +197,8 @@ public class AfetacaoSteps {
 		dataSet = new DefaultDataSet(tableTa);
 		DatabaseOperation.DELETE_ALL.execute(conn, dataSet);
 		dataSet = new DefaultDataSet(tableAfetacaoMaxima);
+		DatabaseOperation.DELETE_ALL.execute(conn, dataSet);
+		dataSet = new DefaultDataSet(tableRecalculaAfetacao);
 		DatabaseOperation.DELETE_ALL.execute(conn, dataSet);
 	}
 
@@ -231,23 +236,15 @@ public class AfetacaoSteps {
 		DefaultDataSet dataSetTaAfetacao = getDataSetTaAfetacao(codigo, ta, novaVoz, new Date());
 		DatabaseOperation.INSERT.execute(conn, dataSetTaAfetacao);
 
-		DefaultDataSet dataSetTa = getDataSetTa(ta, null, novaVoz, null, codigo);
-		DatabaseOperation.UPDATE.execute(conn, dataSetTa);
+		//DefaultDataSet dataSetTa = getDataSetTa(ta, null, novaVoz, null, codigo);
+		//DatabaseOperation.UPDATE.execute(conn, dataSetTa);
 	}
 
 	@When("^Recalcular afetacao$")
-	public void recalcular_afetacao() throws Throwable {
-		// TODO EXECUTAR CHAMADA DA PROCEDURE QUE RECALCULA
-		// create or replace PROCEDURE ATUALIZAR_SOMA_AFETACOES
-		// (p_TQA_CODIGO_NUMBER) IS
-		
+	public void recalcular_afetacao() throws Throwable {		
 		IDatabaseConnection conn = getConnection();
-		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(5)}");
-		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(4)}");
-		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(3)}");
-		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(2)}");
-		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(1)}");
-		//ATUALIZAR_SOMA_AFETACOES
+		conn.getConnection().createStatement().execute("{call CORRIGIR_AFETACAO_24H()}");
+		//conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(1)}");
 	}
 
 	@Then("^a afetacao VOZ atual do TA (\\d+) deve ser (\\d+)$")
@@ -296,10 +293,6 @@ public class AfetacaoSteps {
 		Integer somaMaxVozEh = rs.getInt(1);
 
 		org.junit.Assert.assertEquals(somaMaxVozDeveSer, somaMaxVozEh);
-
-		/*
-		 * SELECT * FROM AFETACAO_MAXIMA_TA WHERE SEQUENCIA = 3010075;
-		 */
 	}
 
 	@Given("^Mudar raiz do TA (\\d+) para null$")

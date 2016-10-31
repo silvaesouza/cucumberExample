@@ -1,3 +1,19 @@
+CREATE TABLE "TBL_TA_TEST_RECALCULA_AFETACAO" (
+	TA_CODIGO NUMBER,
+	DATA_CRIACAO DATE
+);
+--------------------------------------------------------------------------------
+create or replace PROCEDURE CORRIGIR_AFETACAO_24H IS
+BEGIN
+	FOR c IN (
+		SELECT distinct TA_CODIGO
+		FROM TBL_TA_TEST_RECALCULA_AFETACAO
+		WHERE DATA_CRIACAO > TRUNC(SYSDATE - 1,'HH')
+	) LOOP
+		atualizar_soma_afetacoes(c.TA_CODIGO);
+	END LOOP;
+END;
+--------------------------------------------------------------------------------
 create or replace PROCEDURE ATUALIZAR_SOMA_AFETACOES (p_TQA_CODIGO NUMBER) IS
 l_voz NUMBER;
 l_cp NUMBER;
@@ -113,7 +129,7 @@ BEGIN
           FROM tbl_test_ta taOuter
           CONNECT BY NOCYCLE
           PRIOR tqa_codigo = tqa_raiz
-          START WITH tqa_codigo = p_TQA_CODIGO
+          START WITH tqa_codigo = c.TQA_CODIGO
         ) 
         select SUM(REGEXP_SUBSTR(sm.allMax, '[^;]+', 1, 1)) voz            --1
              , SUM(REGEXP_SUBSTR(sm.allMax, '[^;]+', 1, 2)) cp             --2
@@ -154,6 +170,94 @@ BEGIN
             t.interconexao   = COALESCE(l_interconexao, 0),   --10
             t.sppac          = COALESCE(l_sppac, 0),          --11
             t.iptv           = COALESCE(l_iptv, 0)            --12
-        WHERE t.sequencia = p_TQA_CODIGO;
+        WHERE t.sequencia = c.TQA_CODIGO;
     END LOOP;
 END;
+--------------------------------------------------------------------------------
+CREATE TABLE "AFETACAO_TEST_MAXIMA_TA"
+  (
+    "SEQUENCIA"       NUMBER(10,0) NOT NULL ENABLE,
+    "TQA_RAIZ"        NUMBER(10,0),
+    "TRANSMISSAO"     NUMBER,
+    "VOZ"             NUMBER,
+    "DETERMINISTICA"  NUMBER,
+    "SPEEDY"          NUMBER,
+    "CLIENTE"         NUMBER,
+    "CP"              NUMBER,
+    "REDE_IP"         NUMBER,
+    "INTERCONEXAO"    NUMBER,
+    "SPPAC"           NUMBER,
+    "DTH"             NUMBER,
+    "FTTX"            NUMBER,
+    "IPTV"            NUMBER,
+    "DT_ULT_AFETACAO" TIMESTAMP (6),
+    PRIMARY KEY ("SEQUENCIA")
+  );
+--------------------------------------------------------------------------------
+--DROP INDEX "AFETACAO_MAXIMA_TA_PK_IDX";
+--DROP INDEX "AFETACAO_MAXIMA_TA_RAIZ_IDX";
+CREATE UNIQUE INDEX "AFETACAO_MAXIMA_TA_PK_IDX" ON "AFETACAO_TEST_MAXIMA_TA" ("SEQUENCIA");
+CREATE INDEX "AFETACAO_MAXIMA_TA_RAIZ_IDX" ON "AFETACAO_TEST_MAXIMA_TA" ("TQA_RAIZ");
+--------------------------------------------------------------------------------
+CREATE OR REPLACE TRIGGER tr_cria_afet_max
+AFTER INSERT ON TBL_TEST_TA
+FOR EACH ROW
+BEGIN
+    INSERT INTO afetacao_test_maxima_ta (
+        SEQUENCIA,TQA_RAIZ,DT_ULT_AFETACAO,TRANSMISSAO,VOZ,DETERMINISTICA,SPEEDY,CLIENTE,CP,REDE_IP,INTERCONEXAO,SPPAC,DTH,FTTX,IPTV
+    ) VALUES (
+        :NEW.TQA_CODIGO,:NEW.TQA_RAIZ,:NEW.TQA_DATA_CRIACAO,0,0,0,0,0,0,0,0,0,0,0,0
+    );
+END;
+--------------------------------------------------------------------------------
+CREATE OR REPLACE TRIGGER TTS_ULTIMA_AFETACAO_TA
+AFTER INSERT
+ON TBL_TEST_TA_AFETACAO_PARCIAL
+FOR EACH ROW
+BEGIN
+    UPDATE TBL_TEST_TA SET TQA_ULTIMA_AFETACAO = :NEW.AAP_CODIGO WHERE TQA_CODIGO = :NEW.AAP_TA;
+END;
+--------------------------------------------------------------------------------
+create or replace TRIGGER TTS_TA_AFET_MAX
+FOR INSERT OR UPDATE ON TBL_TEST_TA
+COMPOUND TRIGGER
+  type tas_para_recalcular_type is table of TBL_TEST_TA.TQA_CODIGO%TYPE;
+  tas_para_recalcular tas_para_recalcular_type;
+before statement IS
+begin
+    tas_para_recalcular := tas_para_recalcular_type();
+end before statement;
+AFTER EACH ROW IS
+BEGIN
+    if (INSERTING AND :new.TQA_RAIZ is not null) THEN
+    	INSERT INTO TBL_TA_TEST_RECALCULA_AFETACAO (TA_CODIGO, DATA_CRIACAO) VALUES (:NEW.TQA_CODIGO, SYSDATE);
+    END IF;
+    if (:old.TQA_RAIZ <> :new.TQA_RAIZ) then
+    	INSERT INTO TBL_TA_TEST_RECALCULA_AFETACAO (TA_CODIGO, DATA_CRIACAO) VALUES (:OLD.TQA_CODIGO, SYSDATE);
+    	INSERT INTO TBL_TA_TEST_RECALCULA_AFETACAO (TA_CODIGO, DATA_CRIACAO) VALUES (:OLD.TQA_RAIZ, SYSDATE);
+    end if;
+    if (:old.TQA_RAIZ is not null and :new.TQA_RAIZ is null and UPDATING) then
+    	INSERT INTO TBL_TA_TEST_RECALCULA_AFETACAO (TA_CODIGO, DATA_CRIACAO) VALUES (:OLD.TQA_CODIGO, SYSDATE);
+    	INSERT INTO TBL_TA_TEST_RECALCULA_AFETACAO (TA_CODIGO, DATA_CRIACAO) VALUES (:OLD.TQA_RAIZ, SYSDATE);
+    end if;
+    if (:old.TQA_RAIZ is null and :new.TQA_RAIZ is not null and UPDATING) then
+        INSERT INTO TBL_TA_TEST_RECALCULA_AFETACAO (TA_CODIGO, DATA_CRIACAO) VALUES (:NEW.TQA_CODIGO, SYSDATE);
+    end if;
+END AFTER EACH ROW;
+END TTS_TA_AFET_MAX;
+--------------------------------------------------------------------------------
+create or replace TRIGGER TTS_TA_AFET_PARCIAL_MAX FOR INSERT OR
+  UPDATE ON TBL_TEST_TA_AFETACAO_PARCIAL COMPOUND TRIGGER type tas_para_recalcular_type IS TABLE OF TBL_TEST_TA.TQA_CODIGO%TYPE;
+  tas_para_recalcular tas_para_recalcular_type;
+  before STATEMENT
+IS
+BEGIN
+  tas_para_recalcular := tas_para_recalcular_type();
+END before STATEMENT;
+AFTER EACH ROW
+IS
+BEGIN
+  INSERT INTO TBL_TA_TEST_RECALCULA_AFETACAO (TA_CODIGO, DATA_CRIACAO) VALUES (:NEW.AAP_TA, SYSDATE);
+END AFTER EACH ROW;
+END TTS_TA_AFET_PARCIAL_MAX;
+--------------------------------------------------------------------------------
