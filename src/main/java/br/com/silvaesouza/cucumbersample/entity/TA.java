@@ -24,27 +24,62 @@ public class TA implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
+	@Id 
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "sequence_ta")
+    @Column(name="TQA_CODIGO", nullable=false, precision=10, scale=0)
     private Integer tqaCodigo;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+    @Column(name="TQA_DATA_CRIACAO", nullable=false, length=7)
     private Date tqaDataCriacao;
+	
+	@Column(name="TQA_SOMA_VOZ", nullable=false, precision=10, scale=0)
     private Integer tqaSomaVoz;
-    /*private Integer tqaSomaTransmissao;
+	
+	@Column(name="TQA_SOMA_TRANSMISSAO", precision=10, scale=0)
+    private Integer tqaSomaTransmissao;
+	
+	@Column(name="TQA_SOMA_DETERMINISTICA", precision=10, scale=0)
     private Integer tqaSomaDeterministica;
+	
+	@Column(name="TQA_SOMA_SPEEDY", precision=10, scale=0)
     private Integer tqaSomaSpeedy;
-    private Integer tqaSomaCliente;
+	
+	
+	@Column(name="TQA_SOMA_CLIENTE", precision=10, scale=0)
+	private Integer tqaSomaCliente;
+	
+	@Column(name="TQA_SOMA_CP", precision=10, scale=0)
     private Integer tqaSomaCp;
+	
+	@Column(name="TQA_SOMA_REDEIP", precision=10, scale=0)
     private Integer tqaSomaRedeip;
+	
+	@Column(name="TQA_SOMA_INTERCONEXAO", precision=10, scale=0)
     private Integer tqaSomaInterconexao;
+	
+	@Column(name="TQA_SOMA_SPPAC", precision=10, scale=0)
     private Integer tqaSomaSppac;
+	
+	@Column(name="TQA_SOMA_DTH", precision=10, scale=0)
     private Integer tqaSomaDth;
+	
+	@Column(name="TQA_SOMA_FTTX", precision=10, scale=0)
     private Integer tqaSomaFttx;
-    private Integer tqaSomaIptv;*/
-    
+	
+	@Column(name="TQA_SOMA_IPTV", precision=10, scale=0)
+    private Integer tqaSomaIptv;
+
+	@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="TQA_RAIZ")
+	@org.hibernate.annotations.ForeignKey( name = "none")
     private TA ta;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="TQA_ULTIMA_AFETACAO")
+    @org.hibernate.annotations.ForeignKey( name = "none")
     private TaAfetacaoParcial taAfetacaoParcial;
     
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="TQA_ULTIMA_AFETACAO")
-    @org.hibernate.annotations.ForeignKey( name = "none") 
     public TaAfetacaoParcial getTaAfetacaoParcial() {
         return this.taAfetacaoParcial;
     }
@@ -53,9 +88,6 @@ public class TA implements Serializable {
 		this.taAfetacaoParcial = taAfetacaoParcial;
 	}
 
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="TQA_RAIZ")
-	@org.hibernate.annotations.ForeignKey( name = "none") 
     public TA getTa() {
         return this.ta;
     }
@@ -64,9 +96,6 @@ public class TA implements Serializable {
 		this.ta = ta;
 	}
     
-    @Id 
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "sequence_ta")
-    @Column(name="TQA_CODIGO", nullable=false, precision=10, scale=0)
     public Integer getTqaCodigo() {
         return this.tqaCodigo;
     }
@@ -75,8 +104,6 @@ public class TA implements Serializable {
         this.tqaCodigo = tqaCodigo;
     }
     
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="TQA_DATA_CRIACAO", nullable=false, length=7)
     public Date getTqaDataCriacao() {
         return this.tqaDataCriacao;
     }
@@ -85,7 +112,6 @@ public class TA implements Serializable {
         this.tqaDataCriacao = tqaDataCriacao;
     }
 
-    @Column(name="TQA_SOMA_VOZ", nullable=false, precision=10, scale=0)
     public Integer getTqaSomaVoz() {
         return this.tqaSomaVoz;
     }
@@ -93,4 +119,92 @@ public class TA implements Serializable {
     public void setTqaSomaVoz(Integer tqaSomaVoz) {
         this.tqaSomaVoz = tqaSomaVoz;
     }
+
+	public Integer getTqaSomaTransmissao() {
+		return tqaSomaTransmissao;
+	}
+
+	public void setTqaSomaTransmissao(Integer tqaSomaTransmissao) {
+		this.tqaSomaTransmissao = tqaSomaTransmissao;
+	}
+
+	public Integer getTqaSomaDeterministica() {
+		return tqaSomaDeterministica;
+	}
+
+	public void setTqaSomaDeterministica(Integer tqaSomaDeterministica) {
+		this.tqaSomaDeterministica = tqaSomaDeterministica;
+	}
+
+	public Integer getTqaSomaSpeedy() {
+		return tqaSomaSpeedy;
+	}
+
+	public void setTqaSomaSpeedy(Integer tqaSomaSpeedy) {
+		this.tqaSomaSpeedy = tqaSomaSpeedy;
+	}
+
+	public Integer getTqaSomaCliente() {
+		return tqaSomaCliente;
+	}
+
+	public void setTqaSomaCliente(Integer tqaSomaCliente) {
+		this.tqaSomaCliente = tqaSomaCliente;
+	}
+
+	public Integer getTqaSomaCp() {
+		return tqaSomaCp;
+	}
+
+	public void setTqaSomaCp(Integer tqaSomaCp) {
+		this.tqaSomaCp = tqaSomaCp;
+	}
+
+	public Integer getTqaSomaRedeip() {
+		return tqaSomaRedeip;
+	}
+
+	public void setTqaSomaRedeip(Integer tqaSomaRedeip) {
+		this.tqaSomaRedeip = tqaSomaRedeip;
+	}
+
+	public Integer getTqaSomaInterconexao() {
+		return tqaSomaInterconexao;
+	}
+
+	public void setTqaSomaInterconexao(Integer tqaSomaInterconexao) {
+		this.tqaSomaInterconexao = tqaSomaInterconexao;
+	}
+
+	public Integer getTqaSomaSppac() {
+		return tqaSomaSppac;
+	}
+
+	public void setTqaSomaSppac(Integer tqaSomaSppac) {
+		this.tqaSomaSppac = tqaSomaSppac;
+	}
+
+	public Integer getTqaSomaDth() {
+		return tqaSomaDth;
+	}
+
+	public void setTqaSomaDth(Integer tqaSomaDth) {
+		this.tqaSomaDth = tqaSomaDth;
+	}
+
+	public Integer getTqaSomaFttx() {
+		return tqaSomaFttx;
+	}
+
+	public void setTqaSomaFttx(Integer tqaSomaFttx) {
+		this.tqaSomaFttx = tqaSomaFttx;
+	}
+
+	public Integer getTqaSomaIptv() {
+		return tqaSomaIptv;
+	}
+
+	public void setTqaSomaIptv(Integer tqaSomaIptv) {
+		this.tqaSomaIptv = tqaSomaIptv;
+	}
 }

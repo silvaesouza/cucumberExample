@@ -46,8 +46,8 @@ public class RunAfetacaoTest extends FeaturesBase {
 			JdbcDatabaseTester databaseTester = new JdbcDatabaseTester("oracle.jdbc.driver.OracleDriver",
 					"jdbc:oracle:thin:@localhost:1521/XE", "silvaesouza", "1234");
 
-			connection = databaseTester.getConnection();
-			connection.getConnection().createStatement().execute("{call p_recalc_monthly_sales(1, DATE '2012-07-02')}");
+			//connection = databaseTester.getConnection();
+			//connection.getConnection().createStatement().execute("{call p_recalc_monthly_sales(1, DATE '2012-07-02')}");
 
 		} catch (Exception e) {
 			e.printStackTrace();

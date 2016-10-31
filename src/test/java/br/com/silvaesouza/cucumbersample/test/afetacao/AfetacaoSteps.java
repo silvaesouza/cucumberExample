@@ -240,6 +240,14 @@ public class AfetacaoSteps {
 		// TODO EXECUTAR CHAMADA DA PROCEDURE QUE RECALCULA
 		// create or replace PROCEDURE ATUALIZAR_SOMA_AFETACOES
 		// (p_TQA_CODIGO_NUMBER) IS
+		
+		IDatabaseConnection conn = getConnection();
+		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(5)}");
+		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(4)}");
+		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(3)}");
+		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(2)}");
+		conn.getConnection().createStatement().execute("{call ATUALIZAR_SOMA_AFETACOES(1)}");
+		//ATUALIZAR_SOMA_AFETACOES
 	}
 
 	@Then("^a afetacao VOZ atual do TA (\\d+) deve ser (\\d+)$")
