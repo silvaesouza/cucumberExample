@@ -15,7 +15,7 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = { "classpath:cucumber/CalcularAfetacao.feature" }, glue = {
-		"classpath:br/com/silvaesouza/cucumbersample/test/afetacao" }, tags = "@afetacao")
+		"classpath:br/com/silvaesouza/cucumbersample/test/afetacao" }/*, tags = "@afetacao"*/)
 public class RunAfetacaoTest extends FeaturesBase {
 
 	public static Map<Integer, Integer> tasVozAtual;

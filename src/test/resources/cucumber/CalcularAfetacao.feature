@@ -2,10 +2,10 @@
 @afetacao
 Funcionalidade: Afetacao
   -Vincular/Desvincular TA uns aos outros
-  -Efetuar calculos de Soma de afetacao levEo em consideracao um TA raiz e seus derivados
-  -Efetuar calculos de Máxima afetacao levEo em consideracao um TA raiz e seus derivados
-  -Os calculos de afetacao levam em consideracao apenas VOZ
-  -SOMA = Soma da afetação atual do TA + Derivados 
+  -Efetuar cálculos de Soma de afetação levam em consideração um TA raiz e seus derivados
+  -Efetuar cálculos de Máxima afetação levam em consideração um TA raiz e seus derivados
+  -Os cálculos de afetação levam em consideração apenas VOZ
+  -SOMA = Soma da afetação atual do TA + Derivados
   -MAX  = Soma da maior de todas as afetações do TA e maior de todas de cada derivado
 
   Cenário: Validar base e limpar dados
@@ -51,6 +51,7 @@ Funcionalidade: Afetacao
       |  4 |       20 |       20 |          40 |
       |  2 |       20 |       20 |          20 |
 
+	
   Cenário: Calcular Arvore Novamente
     Dado Recalcular afetacao
 
@@ -87,7 +88,7 @@ Funcionalidade: Afetacao
       |  3 |    1 |       30 |          30 |            30 |               30 |
       |  2 |    1 |       20 |          50 |            40 |               90 |
       |  1 | null |        5 |           5 |            75 |              125 |
-
+	
   Esquema do Cenário: Alterar TA Raiz
     Dado Mudar raiz do TA <ta> para <raiz>
     Então a afetacao VOZ atual do TA <ta> deve ser <vozAtual>
