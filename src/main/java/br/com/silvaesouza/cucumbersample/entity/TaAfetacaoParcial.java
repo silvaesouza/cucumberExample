@@ -17,7 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "TBL_TEST_TA_AFETACAO_PARCIAL")
+@Table(name = "TBL_TA_AFETACAO_PARCIAL")
 @SequenceGenerator(name = "sequence_taafetacao", sequenceName = "SEQ_TA_AFETACAO_PARCIAL")
 public class TaAfetacaoParcial implements Serializable {
 
@@ -34,43 +34,43 @@ public class TaAfetacaoParcial implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "AAP_DATA", length = 7)
 	private Date data;
-	
+
 	@Column(name="AAP_TRANSMISSAO", precision=10, scale=0)
     private Integer transmissao;
-	
+
 	@Column(name="AAP_DETERMINISTICA", precision=10, scale=0)
     private Integer deterministica;
-	
+
 	@Column(name="AAP_SPEEDY", precision=10, scale=0)
     private Integer speedy;
-	
+
 	@Column(name="AAP_CLIENTE", precision=10, scale=0)
     private Integer cliente;
-	
+
 	@Column(name="AAP_CP", precision=10, scale=0)
     private Integer cp;
-	
+
 	@Column(name="AAP_REDEIP", precision=10, scale=0)
     private Integer redeip;
-	
+
 	@Column(name="AAP_INTERCONEXAO", precision=10, scale=0)
     private Integer interconexao;
-	
+
 	@Column(name="AAP_SPPAC", precision=10, scale=0)
     private Integer sppac;
-	
+
 	@Column(name="AAP_DTH", precision=10, scale=0)
     private Integer dth;
-	
+
 	@Column(name="AAP_FTTX", precision=10, scale=0)
     private Integer fttx;
-	
+
 	@Column(name="AAP_IPTV", precision=10, scale=0)
     private Integer iptv;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "AAP_TA", nullable = false)
-	@org.hibernate.annotations.ForeignKey( name = "none") 
+	@org.hibernate.annotations.ForeignKey( name = "none")
 	private TA ta;
 
 	public Integer getCodigo() {
